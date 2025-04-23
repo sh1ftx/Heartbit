@@ -1,31 +1,18 @@
 #!/bin/bash
 
 # ==============================================================================
-# CONFIG.SH - INSTALADOR UNIVERSAL E ROBUSTO
-# ==============================================================================
-# Esse script foi feito para ser executado por QUALQUER USUÁRIO, em QUALQUER
-# SISTEMA OPERACIONAL (Linux - Debian/Arch e Windows via WSL ou Git Bash),
-# automatizando todo o ambiente de execução do projeto de Machine Learning.
-#
-# Ele verifica, instala e configura tudo: Python, pip, venv, bibliotecas e
-# executa o main.py. Possui checagens, mensagens e perguntas interativas.
-#
-# ==============================================================================
-# AUTOR: Gerado por IA (ChatGPT) - Versão Premium de Configuração
-# ==============================================================================
-
-set -e
-
-#!/bin/bash
-
-# ==============================================================================
 # CONFIG.SH - INSTALADOR UNIVERSAL E ROBUSTO DO PROJETO: HEARTBIT
 # ==============================================================================
 # 🧬 Heartbit analisa dados de saúde cardiovascular para revelar padrões
 #     e prever riscos com inteligência e precisão
 # ==============================================================================
 
-# Função para exibir o nome do projeto em ASCII art
+set -e
+
+# -----------------------------
+# Funções de exibição
+# -----------------------------
+
 function show_logo() {
 cat << "EOF"
 
@@ -41,33 +28,24 @@ cat << "EOF"
 EOF
 }
 
-# Exibir logo no início
-show_logo
-
-
-# Função de cabeçalho bonito
 function print_header() {
   echo -e "\n\033[1;34m================================================================================"
   echo -e "        $1"
   echo -e "================================================================================\033[0m"
 }
 
-# Função para mensagens de progresso
 function print_step() {
   echo -e "\033[1;32m[PASSO] $1\033[0m"
 }
 
-# Função para mensagens de alerta
 function print_warn() {
   echo -e "\033[1;33m[AVISO] $1\033[0m"
 }
 
-# Função para mensagens de erro
 function print_error() {
   echo -e "\033[1;31m[ERRO] $1\033[0m"
 }
 
-# Função para perguntas interativas
 function ask_user() {
   read -p "$1 (s/n): " choice
   case "$choice" in
@@ -78,8 +56,10 @@ function ask_user() {
 }
 
 # -----------------------------
-# Detectar o sistema operacional
+# Início do script
 # -----------------------------
+
+show_logo
 print_header "Detectando Sistema Operacional..."
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -192,13 +172,16 @@ echo "$requirements" > requirements.txt
 pip install -r requirements.txt
 
 # -----------------------------
-# Executar main.py
+# Localizar e executar main.py
 # -----------------------------
-print_header "Executando o projeto (main.py)..."
+print_header "Executando o projeto..."
 
-if [ -f "main.py" ]; then
-  python main.py
-else
-  print_error "Arquivo main.py não encontrado no diretório atual."
+MAIN_FILE=$(find . -type f -name "main.py" | head -n 1)
+
+if [ -z "$MAIN_FILE" ]; then
+  print_error "Arquivo main.py não encontrado em nenhum diretório."
   exit 1
+else
+  echo -e "\033[1;34mExecutando: $MAIN_FILE\033[0m"
+  python "$MAIN_FILE"
 fi
