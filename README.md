@@ -41,7 +41,7 @@ O avanço da Inteligência Artificial (IA) está remodelando o cenário da medic
 Diversos estudos apontam para uma mudança no papel dos profissionais da saúde diante da IA:
 
 - [AI Will Not Replace Doctors, But It May Drastically Change Their Jobs](https://www.forbes.com/sites/forbestechcouncil/2022/11/18/ai-will-not-replace-doctors-but-it-may-drastically-change-their-jobs/)
-- [Artificial Intelligence In Healthcare: Will AI Replace Doctors?](https://www.electronicsforu.com/technology-trends/artificial-intelligence-healthcare-ai-replace-doctors)
+- [Artificial Intelligence In Healthcare: Will AI Replace Doctors?](https://www.electronicsforu.com/technology-trends/tech-focus/artificial-intelligence-healthcare-replace-doctors)
 - [Will artificial intelligence replace doctors?](https://www.aamc.org/news-insights/will-artificial-intelligence-replace-doctors)
 
 Essas leituras sustentam que a IA atuará como assistente, ampliando capacidades médicas, otimizando diagnósticos e melhorando o atendimento ao paciente.
@@ -199,13 +199,6 @@ Este projeto é open-source, licenciado sob [MIT License](LICENSE).
   <a href="https://www.twitch.tv/sh1ft7172"><img src="https://img.shields.io/badge/Twitch-1d232e?style=for-the-badge&logo=twitch&logoColor=6AFFA0"></a>
 </p>
 
-
-
-
-
-
-
-
 ---
 
 ## 10. Referências
@@ -214,7 +207,7 @@ Este projeto é open-source, licenciado sob [MIT License](LICENSE).
 - SHAP GitHub: [SHAP - Explainable ML](https://github.com/slundberg/shap)
 - Artigos:
   - [Forbes - AI & Doctors](https://www.forbes.com/sites/forbestechcouncil/2022/11/18/ai-will-not-replace-doctors-but-it-may-drastically-change-their-jobs/)
-  - [Electronics4U - AI in Healthcare](https://www.electronicsforu.com/technology-trends/artificial-intelligence-healthcare-ai-replace-doctors)
+  - [Electronics4U - AI in Healthcare](https://www.electronicsforu.com/technology-trends/tech-focus/artificial-intelligence-healthcare-replace-doctors)
   - [AAMC - Will AI Replace Doctors?](https://www.aamc.org/news-insights/will-artificial-intelligence-replace-doctors)
 
 ---
