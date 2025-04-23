@@ -195,7 +195,7 @@ echo ".env criado com sucesso."
 # -----------------------------
 print_header "Executando o projeto..."
 
-MAIN_FILE=$(find . -type f -name "main.py" | grep "/src/" | head -n 1)
+MAIN_FILE=$(find . -type f -name "main.py" | head -n 1)
 
 if [ -z "$MAIN_FILE" ]; then
   print_error "Arquivo main.py não encontrado."
