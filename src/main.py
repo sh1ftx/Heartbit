@@ -7,6 +7,8 @@ import plotly.io as pio
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+import shap
 
 # Forçar renderização no navegador (útil no VS Code)
 pio.renderers.default = "browser"
@@ -120,5 +122,13 @@ RandomForestClassifier()
 ml_model.predict(x_test.iloc[0].values.reshape(1, -1))
 array([1])
 y_test.iloc(0)
-predictions = ml_model
+predictions = ml_model.predict(x_test)
+print(classification_report(y_test, predictions))
+print(confusion_matrix(y_test, predictions))
 
+explainer = shap.TreeExplainer(ml_model)
+shap_values = explainer.shap_values(X)
+shap.summary_plot(shap_values[1], x)
+n = 2
+shap.initjs()
+shap.force_plot(explainer.expected_value[1], shap_values[0], x_train.iloc[n])
