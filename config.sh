@@ -1,6 +1,15 @@
 #!/bin/bash
 
 # ==============================================================================
+
+# Esse script foi feito para ser executado por QUALQUER USUÁRIO, em QUALQUER
+# SISTEMA OPERACIONAL (Linux - Debian/Arch e Windows via WSL ou Git Bash),
+# automatizando todo o ambiente de execução do projeto de Machine Learning.
+#
+# 🧬 Heartbit analisa dados de saúde cardiovascular para revelar padrões
+#     e prever riscos com inteligência e precisão
+
+# ==============================================================================
 # CONFIG.SH - INSTALADOR UNIVERSAL E ROBUSTO DO PROJETO: HEARTBIT
 # ==============================================================================
 # 🧬 Heartbit analisa dados de saúde cardiovascular para revelar padrões
@@ -9,8 +18,14 @@
 
 set -e
 
+# Criar pasta de logs
+mkdir -p logs
+LOGFILE="logs/install.log"
+exec > >(tee -i $LOGFILE)
+exec 2>&1
+
 # -----------------------------
-# Funções de exibição
+# Funções utilitárias
 # -----------------------------
 
 function show_logo() {
@@ -56,10 +71,11 @@ function ask_user() {
 }
 
 # -----------------------------
-# Início do script
+# Início
 # -----------------------------
-
 show_logo
+
+# Detectar sistema operacional
 print_header "Detectando Sistema Operacional..."
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -73,7 +89,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     print_error "Distribuição Linux não suportada automaticamente."
     exit 1
   fi
-elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
+elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
   OS="windows"
   PM="choco"
 else
@@ -84,7 +100,7 @@ fi
 echo "Sistema detectado: $OS"
 
 # -----------------------------
-# Checar e instalar Python
+# Instalar Python se necessário
 # -----------------------------
 print_header "Verificando o Python..."
 
@@ -114,13 +130,11 @@ fi
 # -----------------------------
 # Criar ambiente virtual
 # -----------------------------
-print_header "Configurando ambiente virtual..."
+print_header "Criando ambiente virtual..."
 
 if [ ! -d "venv" ]; then
   python3 -m venv venv
   echo "Ambiente virtual criado."
-else
-  echo "Ambiente virtual já existe."
 fi
 
 source venv/bin/activate || source venv/Scripts/activate
@@ -134,54 +148,61 @@ pip install --upgrade pip
 # -----------------------------
 # Instalar dependências
 # -----------------------------
-print_header "Instalando dependências..."
+print_header "Instalando dependências do projeto..."
 
-requirements=$(cat <<EOF
+cat > requirements.txt <<EOF
 cloudpickle==3.1.1
-contourpy==1.3.2
-cycler==0.12.1
-fonttools==4.57.0
-joblib==1.4.2
-kiwisolver==1.4.8
-llvmlite==0.44.0
-matplotlib==3.10.1
-narwhals==1.36.0
-numba==0.61.2
-numpy==2.2.5
-packaging==25.0
 pandas==2.2.3
-pillow==11.2.1
-plotly==6.0.1
-pyparsing==3.2.3
-python-dateutil==2.9.0.post0
-pytz==2025.2
-scikit-learn==1.6.1
-scipy==1.15.2
+matplotlib==3.10.1
 seaborn==0.13.2
+scikit-learn==1.6.1
 shap==0.47.2
-six==1.17.0
-slicer==0.0.8
-threadpoolctl==3.6.0
+plotly==6.0.1
 tqdm==4.67.1
-typing_extensions==4.13.2
-tzdata==2025.2
+numpy==2.2.5
 EOF
-)
 
-echo "$requirements" > requirements.txt
 pip install -r requirements.txt
 
 # -----------------------------
-# Localizar e executar main.py
+# Instalar DVC e MLflow
+# -----------------------------
+print_header "Instalando DVC e MLflow..."
+pip install dvc[gs,s3] mlflow
+
+# -----------------------------
+# Instalar Jupyter (opcional)
+# -----------------------------
+if ask_user "Deseja instalar o Jupyter Notebook?"; then
+  print_step "Instalando Jupyter..."
+  pip install notebook jupyterlab
+else
+  print_step "Instalação do Jupyter ignorada."
+fi
+
+# -----------------------------
+# Criar .env
+# -----------------------------
+print_header "Gerando arquivo .env..."
+cat > .env <<EOF
+# Arquivo .env do Heartbit
+DATASET_PATH=./database/cardio_train.csv
+EOF
+echo ".env criado com sucesso."
+
+# -----------------------------
+# Executar o projeto
 # -----------------------------
 print_header "Executando o projeto..."
 
 MAIN_FILE=$(find . -type f -name "main.py" | head -n 1)
 
 if [ -z "$MAIN_FILE" ]; then
-  print_error "Arquivo main.py não encontrado em nenhum diretório."
+  print_error "Arquivo main.py não encontrado."
   exit 1
 else
-  echo -e "\033[1;34mExecutando: $MAIN_FILE\033[0m"
-  python "$MAIN_FILE"
+  MAIN_FILE_ABS=$(realpath "$MAIN_FILE")
+  echo -e "\033[1;34mExecutando: $MAIN_FILE_ABS\033[0m"
+  python_exec=$(command -v python3 || command -v python)
+  "$python_exec" "$MAIN_FILE_ABS"
 fi
