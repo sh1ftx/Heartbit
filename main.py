@@ -14,7 +14,7 @@ import shap
 pio.renderers.default = "browser"
 
 # Carregar dados
-df_cardio = pd.read_csv("../database/cardio_train.csv", sep=";", index_col=0)
+df_cardio = pd.read_csv("cardio_train.csv", sep=";", index_col=0)
 
 # =============================
 # Gráfico de variáveis contínuas (boxplots)

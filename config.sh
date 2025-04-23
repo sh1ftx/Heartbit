@@ -1,27 +1,19 @@
 #!/bin/bash
 
-# ==============================================================================
-
-# Esse script foi feito para ser executado por QUALQUER USUÁRIO, em QUALQUER
-# SISTEMA OPERACIONAL (Linux - Debian/Arch e Windows via WSL ou Git Bash),
-# automatizando todo o ambiente de execução do projeto de Machine Learning.
-#
+# ============================================================================== 
+# CONFIG.SH - INSTALADOR UNIVERSAL E ROBUSTO DO PROJETO: HEARTBIT 
+# ============================================================================== 
 # 🧬 Heartbit analisa dados de saúde cardiovascular para revelar padrões
-#     e prever riscos com inteligência e precisão
-
-# ==============================================================================
-# CONFIG.SH - INSTALADOR UNIVERSAL E ROBUSTO DO PROJETO: HEARTBIT
-# ==============================================================================
-# 🧬 Heartbit analisa dados de saúde cardiovascular para revelar padrões
-#     e prever riscos com inteligência e precisão
+#     e prever riscos com inteligência e precisão 
 # ==============================================================================
 
 set -e
 
 # Criar pasta de logs
-mkdir -p logs
-LOGFILE="logs/install.log"
-exec > >(tee -i $LOGFILE)
+LOG_DIR="logs"
+mkdir -p "$LOG_DIR"
+LOGFILE="$LOG_DIR/install.log"
+exec > >(tee -i "$LOGFILE")
 exec 2>&1
 
 # -----------------------------
@@ -149,20 +141,35 @@ pip install --upgrade pip
 # Instalar dependências
 # -----------------------------
 print_header "Instalando dependências do projeto..."
-
-cat > requirements.txt <<EOF
-cloudpickle==3.1.1
-pandas==2.2.3
-matplotlib==3.10.1
-seaborn==0.13.2
-scikit-learn==1.6.1
-shap==0.47.2
-plotly==6.0.1
-tqdm==4.67.1
-numpy==2.2.5
-EOF
-
-pip install -r requirements.txt
+pip install \
+  cloudpickle==3.1.1 \
+  contourpy==1.3.2 \
+  cycler==0.12.1 \
+  fonttools==4.57.0 \
+  joblib==1.4.2 \
+  kiwisolver==1.4.8 \
+  llvmlite==0.44.0 \
+  matplotlib==3.10.1 \
+  narwhals==1.36.0 \
+  numba==0.61.2 \
+  numpy==2.2.5 \
+  packaging==25.0 \
+  pandas==2.2.3 \
+  pillow==11.2.1 \
+  plotly==6.0.1 \
+  pyparsing==3.2.3 \
+  python-dateutil==2.9.0.post0 \
+  pytz==2025.2 \
+  scikit-learn==1.6.1 \
+  scipy==1.15.2 \
+  seaborn==0.13.2 \
+  shap==0.47.2 \
+  six==1.17.0 \
+  slicer==0.0.8 \
+  threadpoolctl==3.6.0 \
+  tqdm==4.67.1 \
+  typing_extensions==4.13.2 \
+  tzdata==2025.2
 
 # -----------------------------
 # Instalar DVC e MLflow
@@ -195,7 +202,11 @@ echo ".env criado com sucesso."
 # -----------------------------
 print_header "Executando o projeto..."
 
-MAIN_FILE=$(find . -type f -name "main.py" | head -n 1)
+MAIN_FILE=$(find . -type f -name "main.py" \
+  -not -path "./venv/*" \
+  -not -path "./.venv/*" \
+  -not -path "*/site-packages/*" \
+  | head -n 1)
 
 if [ -z "$MAIN_FILE" ]; then
   print_error "Arquivo main.py não encontrado."
