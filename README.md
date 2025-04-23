@@ -110,7 +110,7 @@ Veja o [config.sh](./config.sh) para instalação automatizada.
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/sh1ftx/Heartbit.git
+https://github.com/sh1ftx/Heartbit.git
 cd Heartbit
 
 # Dar permissão e executar o script de instalação
