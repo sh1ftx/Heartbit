@@ -1,6 +1,6 @@
 # 🧬 Heartbit
 
-> *Análise preditiva de dados de saúde cardiovascular com machine learning*
+> *Análise preditiva de dados de saúde cardiovascular com machine learning, utilizando Python.*
 
 ```
   ___ ___                        __ __________.__  __   
